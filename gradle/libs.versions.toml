@@ -11,7 +11,7 @@ lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.8.2"
 composeBom = "2024.04.00"
 coil = "2.6.0"
-material = "1.6.5"
+material = "1.6.7"
 navigationCompose = "2.7.7"
 
 [libraries]
