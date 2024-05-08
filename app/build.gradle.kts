@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    alias(libs.plugins.kotlinParcelize)
+    alias(libs.plugins.googleServices)
 }
 
 android {
@@ -72,5 +72,14 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(platform(libs.firebase))
+    implementation(libs.firebaseAnalytics)
+    implementation(libs.firebaseFirestore)
+    implementation(libs.coroutinesCore)
+
     implementation(libs.coil)
+    implementation(platform(libs.koinBom))
+    implementation(libs.koinCore)
+    implementation(libs.koinAndroid)
+    implementation(libs.koinCompose)
 }

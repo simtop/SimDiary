@@ -1,18 +1,22 @@
 [versions]
-agp = "8.5.0-alpha03"
-animation = "1.6.5"
-foundation = "1.6.5"
+agp = "8.5.0-alpha08"
+animation = "1.6.7"
+foundation = "1.6.7"
 kotlin = "1.9.22"
-coreKtx = "1.12.0"
+coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.7.0"
-activityCompose = "1.8.2"
-composeBom = "2024.04.00"
+activityCompose = "1.9.0"
+composeBom = "2024.05.00"
 coil = "2.6.0"
-material = "1.6.5"
-navigationCompose = "2.7.7"
+material = "1.6.7"
+navigationCompose = "2.8.0-alpha08"
+koin-bom = "3.5.1"
+google = "4.4.1"
+firebaseBom = "33.0.0"
+coroutines = "1.7.3"
 
 [libraries]
 androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
@@ -34,10 +38,20 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil"}
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+koinBom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koinCore = { module = "io.insert-koin:koin-core" }
+koinTest = { module = "io.insert-koin:koin-test" }
+koinAndroid = { module = "io.insert-koin:koin-android" }
+koinCompose = { module = "io.insert-koin:koin-androidx-compose" }
+firebase = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebaseAnalytics = { module = "com.google.firebase:firebase-analytics" }
+firebaseFirestore = { module = "com.google.firebase:firebase-firestore-ktx"}
+coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "google"}
 
 
