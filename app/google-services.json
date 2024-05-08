@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "107243133943",
+    "project_id": "simdiary-33eb1",
+    "storage_bucket": "simdiary-33eb1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:107243133943:android:a56dc340da2fc44d7f2cf2",
+        "android_client_info": {
+          "package_name": "com.simtop.simdiary"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnbI8TkYAl6Gyep72EtcLz1I6-9HqS5Dc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

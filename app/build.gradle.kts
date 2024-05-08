@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.googleServices)
 }
 
@@ -76,6 +77,8 @@ dependencies {
     implementation(libs.firebaseAnalytics)
     implementation(libs.firebaseFirestore)
     implementation(libs.coroutinesCore)
+
+    implementation(libs.jsonSerialization)
 
     implementation(libs.coil)
     implementation(platform(libs.koinBom))
