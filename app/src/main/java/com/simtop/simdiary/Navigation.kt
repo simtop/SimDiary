@@ -31,12 +31,18 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.toRoute
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import org.koin.androidx.compose.koinViewModel
+import java.util.Date
 
 @Composable
 fun SetupNavGraph(
@@ -49,16 +55,17 @@ fun SetupNavGraph(
     ) {
         homeRoute(
             navigateToDetailWithArgs = {
-                val data = Diary(title = it)
-                navController.currentBackStackEntry?.savedStateHandle?.apply {
-                    set("detailArgument", data)
-                }
-                navController.navigate(Screen.Detail.passDiaryId(diaryId = it))
+//                val data = Diary(title = it)
+//                navController.currentBackStackEntry?.savedStateHandle?.apply {
+//                    set("detailArgument", data)
+//                }
+                navController.navigate(Diary(title = it))
+                //navController.navigate(Screen.Detail.passDiaryId(diaryId = it))
             }
         )
-        val detailArgument = navController.previousBackStackEntry?.savedStateHandle?.get<Diary>(
-            "detailArgument"
-        )
+//        val detailArgument = navController.previousBackStackEntry?.savedStateHandle?.get<Diary>(
+//            "detailArgument"
+//        )
         detailRoute(
             navigateBack = {
                 navController.popBackStack()
@@ -74,26 +81,36 @@ fun NavGraphBuilder.homeRoute(
     composable(route = Screen.Home.route) {
         HomeList("home", navigateToDetailWithArgs)
     }
+
+
 }
 
 fun NavGraphBuilder.detailRoute(
     navigateBack: () -> Unit,
     navController: NavHostController
 ) {
-    composable(route = Screen.Detail.route,
-        arguments = listOf(navArgument(name = Constants.DETAIL_SCREEN_ARGUMENT_KEY) {
-            type = NavType.StringType
-        })
-    ) { _ ->
-        val data = remember {
-            mutableStateOf(
-                navController.previousBackStackEntry?.savedStateHandle?.get<Diary>(
-                    "detailArgument"
-                )
-            )
-        }
-        data.value?.title?.let { Detail(it, navigateBack) } ?: run { navigateBack.invoke() }
+    composable<Diary> { backStackEntry ->
+        val data: Diary = backStackEntry.toRoute()
+        Detail(data.title, navigateBack)
     }
+//    composable(route = Screen.DetailTwo.route
+//        arguments = listOf(navArgument(name = Constants.DETAIL_SCREEN_ARGUMENT_KEY) {
+//            type = NavType.StringType
+//        })
+//    ) { backStackEntry->
+//        val data: Diary = backStackEntry.toRoute()
+//        val data = remember {
+//            mutableStateOf(
+//                navController.previousBackStackEntry?.savedStateHandle?.get<Diary>(
+//                    "detailArgument"
+//                )
+//            )
+//        }
+//        data.value?.title?.let { Detail(it, navigateBack) } ?: run { navigateBack.invoke() }
+//       Detail(data.title, navigateBack)
+//        backStackEntry.arguments?.getString(Constants.DETAIL_SCREEN_ARGUMENT_KEY)
+//            ?.let { Detail(it, navigateBack) } ?: run { navigateBack.invoke() }
+//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,6 +153,14 @@ fun NumberHolder(number: Int, action: (String) -> Unit) {
         .fillMaxWidth()
         .clickable {
             action.invoke(number.toString())
+            Firebase.firestore
+                .collection("posts")
+                .add(
+                    hashMapOf(
+                        "text" to number.toString(),
+                        "date_posted" to Date()
+                    )
+                )
         }, verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -153,7 +178,7 @@ fun NumberHolder(number: Int, action: (String) -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @ThemePreviews
 @Composable
-fun Detail(text: String = "Hola", action: () -> Unit = {}) {
+fun Detail(text: String = "Hola", action: () -> Unit = {}, viewModel: DiaryListViewModel = koinViewModel()) {
     Scaffold(topBar = {
         TopAppBar(title = { Text("Detail Screen") }, navigationIcon = {
             Icon(
@@ -176,7 +201,8 @@ fun Detail(text: String = "Hola", action: () -> Unit = {}) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = text, Modifier.clickable { action.invoke() }, color = Color.Blue)
+                Text(text = viewModel.uiState.selectedDiary?.title ?: "No", Modifier.clickable { action.invoke() }, color = Color.Blue)
+                //Text(text = text, Modifier.clickable { action.invoke() }, color = Color.Blue)
             }
         }
     }

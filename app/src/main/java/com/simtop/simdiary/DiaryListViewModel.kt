@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavType
+import androidx.navigation.toRoute
 import com.simtop.simdiary.Constants.DETAIL_SCREEN_ARGUMENT_KEY
 
 class DiaryListViewModel(
@@ -17,6 +18,16 @@ class DiaryListViewModel(
     var uiState by mutableStateOf(UiState())
         private set
 
+    init {
+        getDiaryIdArgument()
+    }
+
+    private fun getDiaryIdArgument() {
+        val data: Diary = savedStateHandle.toRoute()
+        uiState = uiState.copy(
+            selectedDiaryId = data.id
+        )
+    }
 
 }
 
