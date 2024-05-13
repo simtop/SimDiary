@@ -2,7 +2,7 @@
 agp = "8.5.0-alpha08"
 animation = "1.6.7"
 foundation = "1.6.7"
-kotlin = "1.9.22"
+kotlin = "1.9.24"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
