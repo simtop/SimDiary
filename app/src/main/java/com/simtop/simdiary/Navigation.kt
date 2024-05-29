@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,13 +30,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import androidx.navigation.toRoute
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -55,22 +51,13 @@ fun SetupNavGraph(
     ) {
         homeRoute(
             navigateToDetailWithArgs = {
-//                val data = Diary(title = it)
-//                navController.currentBackStackEntry?.savedStateHandle?.apply {
-//                    set("detailArgument", data)
-//                }
                 navController.navigate(Diary(title = it))
-                //navController.navigate(Screen.Detail.passDiaryId(diaryId = it))
             }
         )
-//        val detailArgument = navController.previousBackStackEntry?.savedStateHandle?.get<Diary>(
-//            "detailArgument"
-//        )
         detailRoute(
             navigateBack = {
                 navController.popBackStack()
-            },
-            navController
+            }
         )
     }
 }
@@ -86,31 +73,11 @@ fun NavGraphBuilder.homeRoute(
 }
 
 fun NavGraphBuilder.detailRoute(
-    navigateBack: () -> Unit,
-    navController: NavHostController
-) {
+    navigateBack: () -> Unit) {
     composable<Diary> { backStackEntry ->
         val data: Diary = backStackEntry.toRoute()
         Detail(data.title, navigateBack)
     }
-//    composable(route = Screen.DetailTwo.route
-//        arguments = listOf(navArgument(name = Constants.DETAIL_SCREEN_ARGUMENT_KEY) {
-//            type = NavType.StringType
-//        })
-//    ) { backStackEntry->
-//        val data: Diary = backStackEntry.toRoute()
-//        val data = remember {
-//            mutableStateOf(
-//                navController.previousBackStackEntry?.savedStateHandle?.get<Diary>(
-//                    "detailArgument"
-//                )
-//            )
-//        }
-//        data.value?.title?.let { Detail(it, navigateBack) } ?: run { navigateBack.invoke() }
-//       Detail(data.title, navigateBack)
-//        backStackEntry.arguments?.getString(Constants.DETAIL_SCREEN_ARGUMENT_KEY)
-//            ?.let { Detail(it, navigateBack) } ?: run { navigateBack.invoke() }
-//    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -201,8 +168,7 @@ fun Detail(text: String = "Hola", action: () -> Unit = {}, viewModel: DiaryListV
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = viewModel.uiState.selectedDiary?.title ?: "No", Modifier.clickable { action.invoke() }, color = Color.Blue)
-                //Text(text = text, Modifier.clickable { action.invoke() }, color = Color.Blue)
+                Text(text = viewModel.uiState.selectedDiary.title, Modifier.clickable { action.invoke() }, color = Color.Blue)
             }
         }
     }
