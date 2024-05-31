@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
             SimDiaryTheme {
                 val navController = rememberNavController()
                 SetupNavGraph(
-                    startDestination = Screen.Home.route,
+                    startDestination = Screen.Home,
                     navController = navController
                 )
             }

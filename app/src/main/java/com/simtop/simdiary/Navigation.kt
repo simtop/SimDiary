@@ -42,7 +42,7 @@ import java.util.Date
 
 @Composable
 fun SetupNavGraph(
-    startDestination: String,
+    startDestination: Screen,
     navController: NavHostController
 ) {
     NavHost(
@@ -51,7 +51,7 @@ fun SetupNavGraph(
     ) {
         homeRoute(
             navigateToDetailWithArgs = {
-                navController.navigate(Diary(title = it))
+                navController.navigate(Screen.Detail(it))
             }
         )
         detailRoute(
@@ -65,7 +65,7 @@ fun SetupNavGraph(
 fun NavGraphBuilder.homeRoute(
     navigateToDetailWithArgs: (String) -> Unit
 ) {
-    composable(route = Screen.Home.route) {
+    composable<Screen.Home> {
         HomeList("home", navigateToDetailWithArgs)
     }
 
@@ -74,9 +74,9 @@ fun NavGraphBuilder.homeRoute(
 
 fun NavGraphBuilder.detailRoute(
     navigateBack: () -> Unit) {
-    composable<Diary> { backStackEntry ->
-        val data: Diary = backStackEntry.toRoute()
-        Detail(data.title, navigateBack)
+    composable<Screen.Detail> { backStackEntry ->
+        val data: Screen.Detail = backStackEntry.toRoute()
+        Detail(data.id, navigateBack)
     }
 }
 
@@ -168,7 +168,7 @@ fun Detail(text: String = "Hola", action: () -> Unit = {}, viewModel: DiaryListV
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = viewModel.uiState.selectedDiary.title, Modifier.clickable { action.invoke() }, color = Color.Blue)
+                Text(text = viewModel.uiState.selectedDiaryId.orEmpty(), Modifier.clickable { action.invoke() }, color = Color.Blue)
             }
         }
     }

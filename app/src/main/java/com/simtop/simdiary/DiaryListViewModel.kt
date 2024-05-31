@@ -19,9 +19,9 @@ class DiaryListViewModel(
     }
 
     private fun getDiaryIdArgument() {
-        val data: Diary = savedStateHandle.toRoute()
+        val data: Screen.Detail = savedStateHandle.toRoute()
         uiState = uiState.copy(
-            selectedDiary = Diary(title = data.title)
+            selectedDiaryId = data.id
         )
     }
 
@@ -29,7 +29,4 @@ class DiaryListViewModel(
 
 data class UiState(
     val selectedDiaryId: String? = null,
-    val selectedDiary: Diary = Diary(title = "something went wrong"),
-    val title: String = "",
-    val description: String = "",
 )

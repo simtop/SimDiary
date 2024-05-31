@@ -1,8 +1,8 @@
 [versions]
-agp = "8.6.0-alpha03"
+agp = "8.6.0-alpha04"
 animation = "1.6.7"
 foundation = "1.6.7"
-kotlin = "1.9.22"
+kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -13,11 +13,11 @@ composeBom = "2024.05.00"
 coil = "2.6.0"
 material = "1.6.7"
 navigationCompose = "2.8.0-beta02"
-koin-bom = "3.5.1"
-google = "4.4.1"
-firebaseBom = "33.0.0"
-coroutines = "1.8.0"
-jsonSerialization = "1.6.2"
+koin-bom = "3.5.4"
+google = "4.4.2"
+firebaseBom = "33.1.0"
+coroutines = "1.8.1"
+jsonSerialization = "1.6.3"
 
 [libraries]
 androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
