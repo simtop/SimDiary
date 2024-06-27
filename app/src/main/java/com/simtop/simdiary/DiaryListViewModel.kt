@@ -19,9 +19,9 @@ class DiaryListViewModel(
     }
 
     private fun getDiaryIdArgument() {
-        val data: Screen.Detail = savedStateHandle.toRoute()
+        val diary: Diary = savedStateHandle.get<Diary>(Screen.Detail.navArgName) ?: Diary()
         uiState = uiState.copy(
-            selectedDiaryId = data.id
+            selectedDiaryId = diary.id
         )
     }
 

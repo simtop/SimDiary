@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,8 +31,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
@@ -39,6 +42,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.koin.androidx.compose.koinViewModel
 import java.util.Date
+import kotlin.reflect.typeOf
 
 @Composable
 fun SetupNavGraph(
@@ -63,7 +67,7 @@ fun SetupNavGraph(
 }
 
 fun NavGraphBuilder.homeRoute(
-    navigateToDetailWithArgs: (String) -> Unit
+    navigateToDetailWithArgs: (Diary) -> Unit
 ) {
     composable<Screen.Home> {
         HomeList("home", navigateToDetailWithArgs)
@@ -74,15 +78,17 @@ fun NavGraphBuilder.homeRoute(
 
 fun NavGraphBuilder.detailRoute(
     navigateBack: () -> Unit) {
-    composable<Screen.Detail> { backStackEntry ->
+    composable<Screen.Detail>(
+        typeMap = mapOf(typeOf<Diary>() to NavType.fromParcelable<Diary>()
+    )) { backStackEntry ->
         val data: Screen.Detail = backStackEntry.toRoute()
-        Detail(data.id, navigateBack)
+        Detail(data.diary.id,navigateBack)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeList(text: String, action: (String) -> Unit) {
+fun HomeList(text: String, action: (Diary) -> Unit) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val lazyListState = rememberLazyListState()
     val numbers = remember {
@@ -114,12 +120,12 @@ fun HomeList(text: String, action: (String) -> Unit) {
 }
 
 @Composable
-fun NumberHolder(number: Int, action: (String) -> Unit) {
+fun NumberHolder(number: Int, action: (Diary) -> Unit) {
     val context = LocalContext.current
     Row(modifier = Modifier
         .fillMaxWidth()
         .clickable {
-            action.invoke(number.toString())
+            action.invoke(Diary(id = number.toString()))
             Firebase.firestore
                 .collection("posts")
                 .add(
@@ -138,12 +144,10 @@ fun NumberHolder(number: Int, action: (String) -> Unit) {
             )
         )
     }
-
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@ThemePreviews
 @Composable
 fun Detail(text: String = "Hola", action: () -> Unit = {}, viewModel: DiaryListViewModel = koinViewModel()) {
     Scaffold(topBar = {
@@ -172,4 +176,47 @@ fun Detail(text: String = "Hola", action: () -> Unit = {}, viewModel: DiaryListV
             }
         }
     }
+}
+
+@Composable
+fun DiaryView(diary: Diary, action: (String) -> Unit) {
+    val context = LocalContext.current
+    Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                action.invoke(diary.id)
+                Firebase.firestore
+                    .collection("posts")
+                    .add(
+                        hashMapOf(
+                            "text" to diary.id,
+                            "date_posted" to Date()
+                        )
+                    )
+            }, verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier.padding(8.dp),
+                text = diary.id,
+                style = TextStyle(
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        }
+    }
+
+}
+
+@Composable
+@ThemePreviews
+fun DiaryViewPreview() {
+    DiaryView(Diary()) {}
+}
+
+@Composable
+@ThemePreviews
+fun HomeListPreview() {
+    HomeList("home") {}
 }
