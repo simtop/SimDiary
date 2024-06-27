@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavType
 import androidx.navigation.toRoute
+import kotlin.reflect.typeOf
 
 class DiaryListViewModel(
     private val savedStateHandle: SavedStateHandle,
@@ -19,9 +21,13 @@ class DiaryListViewModel(
     }
 
     private fun getDiaryIdArgument() {
-        val diary: Diary = savedStateHandle.get<Diary>(Screen.Detail.navArgName) ?: Diary()
+        val detailArgs: Screen.Detail = savedStateHandle.toRoute<Screen.Detail>(
+            typeMap = mapOf(
+                typeOf<Diary>() to NavType.fromParcelable<Diary>()
+            )
+        )
         uiState = uiState.copy(
-            selectedDiaryId = diary.id
+            selectedDiaryId = detailArgs.diary.id
         )
     }
 
