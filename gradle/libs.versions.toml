@@ -17,7 +17,7 @@ koin-bom = "3.5.4"
 google = "4.4.2"
 firebaseBom = "33.1.1"
 coroutines = "1.8.1"
-jsonSerialization = "1.6.3"
+jsonSerialization = "1.7.2"
 
 [libraries]
 androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
